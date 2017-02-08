@@ -1,0 +1,71 @@
+{
+
+	"target": "ansi_color_build",
+	"syntax": "Packages/ANSIescape/ANSI.tmLanguage",
+	"selector":"source.objective-c",
+	"shell_cmd": "cd $file_path && make clean && rm -rf .theos",
+
+	
+	"variants":
+	[
+		{
+			"name": "iPhone Package",
+			"shell_cmd": "cd $file_path && make package",
+			"env":
+			{
+				"TARGET":"iphone:clang",
+				"ARCHS":"armv7 armv7s arm64"
+			}
+		},
+		{
+			"name": "iPhone Final Package",
+			"shell_cmd": "cd $file_path && make package",
+			"env":
+			{
+				"TARGET":"iphone:clang",
+				"ARCHS":"armv7 armv7s arm64",
+				"FINALPACKAGE":"1"
+			}
+
+		},
+		{
+			"name": "iPhone Install",
+			"shell_cmd": "cd $file_path && make package install",
+			"env":
+			{
+				"TARGET":"iphone:clang",
+				"ARCHS":"armv7 armv7s arm64",
+				"GO_EASY_ON_ME":"1"
+			}
+		},
+		{
+			"name":"Simject Install",
+			"shell_cmd": "cd $file_path && make && ./simject.sh",
+			"env": {
+				"TARGET": "simulator:clang",
+				"ARCHS":"x86_64 i386"
+			},
+		},
+		{
+			"name": "iPhone Testing Upload",
+			"shell_cmd": "cd $file_path && make package && dropbox_uploader.sh upload `cat .theos/last_package` `cut -f3 -d '/' .theos/last_package` && dropbox_uploader.sh share `cut -f3 -d '/' .theos/last_package`",
+			"env": {
+				"TARGET": "iphone:clang",
+				"ARCHS": "armv7 armv7s arm64"			
+			}
+		},
+		{
+			"name": "iPhone Release Upload",
+			"shell_cmd": "cd $file_path && make package && dropbox_uploader.sh upload `cat .theos/last_package` `cut -f3 -d '/' .theos/last_package` && dropbox_uploader.sh share `cut -f3 -d '/' .theos/last_package`",
+			"env": {
+				"TARGET": "iphone:clang",
+				"ARCHS": "armv7 armv7s arm64",
+				"FINALPACKAGE": "1"
+			}
+		},
+		{
+			"name": "Delete Last Package",
+			"shell_cmd": "cd $file_path && rm `cat .theos/last_package`",
+		}
+	]
+}
